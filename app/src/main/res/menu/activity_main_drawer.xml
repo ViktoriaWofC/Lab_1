@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/gr_bio">
+        <item
+            android:id="@+id/nav_bio"
+            android:title="@string/bio" />
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/gr_tags">
+        <item
+            android:id="@+id/nav_tags"
+            android:title="@string/tags" />
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/gr_sett">
+        <item
+            android:id="@+id/nav_sett"
+            android:title="@string/settings" />
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/gr_market">
+        <item
+            android:id="@+id/nav_market"
+            android:title="@string/play_market" />
+    </group>
+
+</menu>

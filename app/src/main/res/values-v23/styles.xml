@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AlertTheme" parent="@style/Theme.AppCompat.DayNight.Dialog">
+        <item name="android:windowBackground">@color/colorDarkGray</item>
+        <item name="android:titleTextColor">@color/colorBlue</item>
+
+    </style>
+
+</resources>
