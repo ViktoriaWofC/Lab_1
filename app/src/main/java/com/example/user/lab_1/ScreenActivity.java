@@ -25,15 +25,18 @@ import android.widget.TextView;
 
 public class ScreenActivity extends AppCompatActivity{
 
+    TabHost tabHost;
+    TabHost.TabSpec tabSpec;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.market_layout);
 
         //////////////////////////////////////////////////////////////////////
-        TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
+        tabHost = (TabHost) findViewById(R.id.tabHost);
         tabHost.setup();
-        TabHost.TabSpec tabSpec = tabHost.newTabSpec("tag1");
+        tabSpec = tabHost.newTabSpec("tag1");
 
         tabSpec.setContent(R.id.tab1);
         tabSpec.setIndicator(getString(R.string.play_and_app));
@@ -62,7 +65,7 @@ public class ScreenActivity extends AppCompatActivity{
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        // создаем адаптер
+        //
         RecyclerAdapter mAdapter = new RecyclerAdapter(myDataset);
         mRecyclerView.setAdapter(mAdapter);
         ///////
@@ -79,13 +82,6 @@ public class ScreenActivity extends AppCompatActivity{
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new RecyclerAdapter(myDataset);
         mRecyclerView.setAdapter(mAdapter);
-        //////////////////////////////////////////////////////////////////////
-
-        LinearLayout linearGoogle = (LinearLayout)findViewById(R.id.linear_google);
-        DisplayMetrics displaymetrics = getResources().getDisplayMetrics();
-        //if(displaymetrics.widthPixels>1100)
-        //    linearGoogle.setLayoutParams(new LinearLayout.LayoutParams(400,55));
-
     }
 
     private String[] getDataSet() {
@@ -104,8 +100,6 @@ public class ScreenActivity extends AppCompatActivity{
         public ViewHolder(View itemView) {
             super(itemView);
             tv = (TextView) itemView.findViewById(R.id.tv_recycler_item);
-
-
         }
     }
 
@@ -113,33 +107,24 @@ public class ScreenActivity extends AppCompatActivity{
 
         private String[] mDataset;
 
-
-        // Конструктор
         public RecyclerAdapter(String[] dataset) {
             mDataset = dataset;
         }
 
-        // Создает новые views (вызывается layout manager-ом)
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                             int viewType) {
-            // create a new view
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.recycler_item, parent, false);
-
-            // тут можно программно менять атрибуты лэйаута (size, margins, paddings и др.)
 
             ViewHolder vh = new ViewHolder(v);
             return vh;
         }
 
-        // Заменяет контент отдельного view (вызывается layout manager-ом)
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             holder.tv.setText(mDataset[position]);
         }
 
-        // Возвращает размер данных (вызывается layout manager-ом)
         @Override
         public int getItemCount() {
             return mDataset.length;

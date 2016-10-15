@@ -44,20 +44,27 @@ public class SettingsActivity extends AppCompatActivity {
                 AppCompatDelegate.MODE_NIGHT_YES);
     }
 
-    int color;
+    static final String SOUND = "sound";
+    static final String COLOR = "color";
+    static final String DATE = "date";
+    static final String DAY = "day";
+    static final String MONTH = "month";
+    static final String YEAR = "year";
+
+    int color = Color.YELLOW;
     Context context;
     AlertDialog al;
     AlertDialog.Builder ad;
     TextView textViewSound;
     TextView textViewDate;
     DatePicker datePicker;
-    //Button buttonColor;
     FloatingActionButton buttonColor;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
+
+    Calendar today;
+    String month;
+    String day;
+    String year;
+    String date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +72,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.settings_layout);
 
         context = SettingsActivity.this;
-        color = Color.YELLOW;
 
-        //buttonColor = (Button) findViewById(R.id.button_color);
         buttonColor = (FloatingActionButton) findViewById(R.id.button_color);
         buttonColor.setBackgroundTintList(ColorStateList.valueOf(color));
         buttonColor.setOnClickListener(new View.OnClickListener() {
@@ -78,12 +83,9 @@ public class SettingsActivity extends AppCompatActivity {
                 ad = new AlertDialog.Builder(context);
                 ad.setView(layoutView);
 
-                //final EditText editText = (EditText)layoutView.findViewById(R.id.editText);
                 final ColorPicker colorPicker = (ColorPicker) layoutView.findViewById(R.id.colorPicker);
                 colorPicker.setColor(color);
                 colorPicker.setOldCenterColor(color);
-
-                //ColorDrawable whiteDrawable = (ColorDrawable)layoutView.getResources().getDrawable(R.drawable.button_color);
 
                 ad.setCancelable(true);
                 ad.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
@@ -136,16 +138,15 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
         /////////////////////////////////////////////
-        Calendar today = Calendar.getInstance();
-        String month;// = String.valueOf(today.get(Calendar.MONTH));
-        String day;
+        today = Calendar.getInstance();
+        year = String.valueOf(today.get(Calendar.YEAR));
         if (String.valueOf(today.get(Calendar.MONTH) + 1).length() == 1)
             month = "0" + String.valueOf(today.get(Calendar.MONTH) + 1);
         else month = String.valueOf(today.get(Calendar.MONTH) + 1);
         if (String.valueOf(today.get(Calendar.DAY_OF_MONTH)).length() == 1)
             day = "0" + String.valueOf(today.get(Calendar.DAY_OF_MONTH));
         else day = String.valueOf(today.get(Calendar.DAY_OF_MONTH));
-        String date = String.valueOf(day + "." + month + "." + today.get(Calendar.YEAR));
+        date = String.valueOf(day + "." + month + "." + year);
 
         textViewDate = (TextView) findViewById(R.id.text_date);
         textViewDate.setText(date);
@@ -159,31 +160,25 @@ public class SettingsActivity extends AppCompatActivity {
 
                 /////
                 datePicker = (DatePicker) layoutView.findViewById(R.id.datePicker);
-                String date = String.valueOf(textViewDate.getText());
-                String month = date.substring(3, 5);
-                String day = date.substring(0, 2);
-                String year = date.substring(6);
+                date = String.valueOf(textViewDate.getText());
+                month = date.substring(3, 5);
+                day = date.substring(0, 2);
+                year = date.substring(6);
 
-
-                //textViewDate.setText(String.valueOf(date));
-                //datePicker.init(Integer.parseInt(day), Integer.parseInt(month)-1,Integer.parseInt(year), null);
-                //datePicker.init(12, 9, 2015, null);
-
-                /////
+                datePicker.init(Integer.parseInt(year), Integer.parseInt(month)-1,Integer.parseInt(day), null);
 
                 ad.setCancelable(true);
                 ad.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String month;
-                        String day;
                         if (String.valueOf(datePicker.getMonth() + 1).length() == 1)
                             month = "0" + String.valueOf(datePicker.getMonth() + 1);
                         else month = String.valueOf(datePicker.getMonth() + 1);
                         if (String.valueOf(datePicker.getDayOfMonth()).length() == 1)
                             day = "0" + String.valueOf(datePicker.getDayOfMonth());
                         else day = String.valueOf(datePicker.getDayOfMonth());
-                        String date = String.valueOf(day + "." + month + "." + datePicker.getYear());
+                        year = String.valueOf(datePicker.getYear());
+                        date = String.valueOf(day + "." + month + "." + year);
                         textViewDate.setText(date);
                     }
                 });
@@ -198,51 +193,43 @@ public class SettingsActivity extends AppCompatActivity {
                 al.show();
             }
         });
-        ///////////////////////////////////////////////////////////////////
 
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     public void onClickCancel(View view) {
         al.cancel();
     }
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    public Action getIndexApiAction() {
-        Thing object = new Thing.Builder()
-                .setName("Settings Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-                .build();
-        return new Action.Builder(Action.TYPE_VIEW)
-                .setObject(object)
-                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-                .build();
+
+    @Override
+    public void onSaveInstanceState(Bundle saveInstanceState) {
+        saveInstanceState.putString(SOUND, textViewSound.getText().toString());
+
+        saveInstanceState.putString(DATE, textViewDate.getText().toString());
+
+        saveInstanceState.putInt(COLOR, color);
+
+        saveInstanceState.putString(DAY, day);
+        saveInstanceState.putString(MONTH, month);
+        saveInstanceState.putString(YEAR, year);
+
+        super.onSaveInstanceState(saveInstanceState);
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+        textViewSound.setText(savedInstanceState.getString(SOUND));
+
+        day = savedInstanceState.getString(DAY);
+        month = savedInstanceState.getString(MONTH);
+        year = savedInstanceState.getString(YEAR);
+        date = String.valueOf(day + "." + month + "." + year);
+        textViewDate.setText(date);
+
+        color = savedInstanceState.getInt(COLOR);
+        buttonColor.setBackgroundTintList(ColorStateList.valueOf(color));
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        AppIndex.AppIndexApi.end(client, getIndexApiAction());
-        client.disconnect();
-    }
 }

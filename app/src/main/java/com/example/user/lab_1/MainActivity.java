@@ -29,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     Context context;
+    ImageView imageView;
     AlertDialog al;
     AlertDialog.Builder ad;
 
@@ -52,26 +54,41 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        context = MainActivity.this;
+        ///////////////////
 
+        imageView = (ImageView)findViewById(R.id.imageView);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showShareMenu(view);
+            }
+        });
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
+        //ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        //        this, drawer,null, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer,null, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer,toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
         drawer.setDrawerListener(toggle);
         drawer.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        drawer.setScrimColor(Color.TRANSPARENT);
+        //drawer.setScrimColor(Color.TRANSPARENT);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        context = MainActivity.this;
-
         ///////////////////
 
+    }
+
+    public void showShareMenu(View v){
+        PopupMenu shareMenu = new PopupMenu(this,v);
+        shareMenu.inflate(R.menu.sharemenu);
+        shareMenu.show();
     }
 
 
@@ -105,44 +122,25 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_help) {
-            View v = (View)findViewById(R.id.action_help);
-            showPopupMenu(v);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+        switch (id){
+            case R.id.menu1:
+                ad = new AlertDialog.Builder(context);
+                ad.setView(R.layout.about_layout);
+                //////////////////////////
+                ad.setCancelable(false);
+                al = ad.create();
+                al.show();
 
+                return true;
+            case R.id.menu2:
+                Toast.makeText(getApplicationContext(),
+                        "Ok, just give me a dollar",
+                        Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.menu3:
+                ad = new AlertDialog.Builder(context);
 
-
-    public void showPopupMenu(View v) {
-        PopupMenu popupMenu = new PopupMenu(this,v);
-        popupMenu.inflate(R.menu.popupmenu);
-
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-
-                            case R.id.menu1:
-                                ad = new AlertDialog.Builder(context);
-                                ad.setView(R.layout.about_layout);
-                                //////////////////////////
-                                ad.setCancelable(false);
-                                al = ad.create();
-                                al.show();
-
-                                return true;
-                            case R.id.menu2:
-                                Toast.makeText(getApplicationContext(),
-                                        "Ok, just give me a dollar",
-                                        Toast.LENGTH_SHORT).show();
-                                return true;
-                            case R.id.menu3:
-                                ad = new AlertDialog.Builder(context);
-
-                                ///////////////////////////
+                ///////////////////////////
                                 /*ad.setTitle(R.string.exit_title);  // заголовок
                                 ad.setMessage(R.string.exit_message); // сообщение
 
@@ -152,28 +150,24 @@ public class MainActivity extends AppCompatActivity
                                     }
                                 });
                                 ad.setNegativeButton(R.string.no, null);*/
-                                //////////////////////////
-                                ad.setView(R.layout.exit_layout);
-                                //////////////////////////
-                                ad.setCancelable(false);
-                                al = ad.create();
-                                al.show();
+                //////////////////////////
+                ad.setView(R.layout.exit_layout);
+                //////////////////////////
+                ad.setCancelable(false);
+                al = ad.create();
+                al.show();
 
-                                //al.getButton(DialogInterface.BUTTON_NEGATIVE).setWidth(300);
-                                //al.getWindow().setLayout(600, 500);
-
-
-                                return true;
-                            default:
-                                return false;
-                        }
-
-                    }
-                });
-
-        popupMenu.show();
+                //al.getButton(DialogInterface.BUTTON_NEGATIVE).setWidth(300);
+                //al.getWindow().setLayout(600, 500);
 
 
+                return true;
+            default:
+                return false;
+
+        }
+
+        //return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -181,6 +175,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+
 
         if (id == R.id.nav_bio) {
             // Handle the camera action
@@ -197,7 +192,7 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
+        return false;
     }
 
 
