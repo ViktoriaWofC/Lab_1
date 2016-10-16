@@ -63,4 +63,5 @@
     <string name="edit_text">Edit text</string>
     <string name="input_new_text">Input new text</string>
     <string name="edit_date">Edit date</string>
+    <string name="edit_color">Edit color</string>
 </resources>
