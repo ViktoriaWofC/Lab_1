@@ -62,4 +62,5 @@
     <string name="cancel">Cancel</string>
     <string name="edit_text">Edit text</string>
     <string name="input_new_text">Input new text</string>
+    <string name="edit_date">Edit date</string>
 </resources>
