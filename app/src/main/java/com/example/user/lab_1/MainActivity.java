@@ -1,23 +1,11 @@
 package com.example.user.lab_1;
 
-import android.app.FragmentManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
-import android.support.annotation.DrawableRes;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.PopupMenu;
-import android.util.DisplayMetrics;
-import android.view.Gravity;
-import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -27,11 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
@@ -41,6 +26,11 @@ public class MainActivity extends AppCompatActivity
     ImageView imageView;
     AlertDialog al;
     AlertDialog.Builder ad;
+    EditText editTextNew;
+    EditText editTextAdd;
+    static final String NEWS = "news";
+    static final String ADD = "add";
+
 
     static {
         AppCompatDelegate.setDefaultNightMode(
@@ -68,8 +58,6 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        //ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-        //        this, drawer,null, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer,toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
@@ -82,7 +70,8 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-
+        editTextNew = (EditText)findViewById(R.id.edTextNew);
+        editTextAdd = (EditText)findViewById(R.id.edTextAdd);
     }
 
     public void showShareMenu(View v){
@@ -112,7 +101,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -140,26 +128,11 @@ public class MainActivity extends AppCompatActivity
             case R.id.menu3:
                 ad = new AlertDialog.Builder(context);
 
-                ///////////////////////////
-                                /*ad.setTitle(R.string.exit_title);  // заголовок
-                                ad.setMessage(R.string.exit_message); // сообщение
-
-                                ad.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int arg1) {
-                                        finish();
-                                    }
-                                });
-                                ad.setNegativeButton(R.string.no, null);*/
-                //////////////////////////
                 ad.setView(R.layout.exit_layout);
                 //////////////////////////
                 ad.setCancelable(false);
                 al = ad.create();
                 al.show();
-
-                //al.getButton(DialogInterface.BUTTON_NEGATIVE).setWidth(300);
-                //al.getWindow().setLayout(600, 500);
-
 
                 return true;
             default:
@@ -178,7 +151,7 @@ public class MainActivity extends AppCompatActivity
 
 
         if (id == R.id.nav_bio) {
-            // Handle the camera action
+            //
 
         } else if (id == R.id.nav_tags) {
 
@@ -193,6 +166,23 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return false;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle saveInstanceState) {
+        saveInstanceState.putString(NEWS, editTextNew.getText().toString());
+        saveInstanceState.putString(ADD, editTextAdd.getText().toString());
+
+        super.onSaveInstanceState(saveInstanceState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        editTextNew.setText(savedInstanceState.getString(NEWS));
+        editTextAdd.setText(savedInstanceState.getString(ADD));
+
     }
 
 

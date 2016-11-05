@@ -24,7 +24,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
     <ScrollView
         android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
@@ -34,8 +33,5 @@
         <include layout="@layout/content_main" />
 
     </ScrollView>
-
-
-
 
 </android.support.design.widget.CoordinatorLayout>
